@@ -3,44 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viral Shorts Machine | Automated Empire</title>
+    <title>VidRush | Automate Your Empire</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030712; }
+        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .phone-mockup { box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25); }
     </style>
 </head>
-<body class="flex flex-col items-center min-h-screen">
-    <header class="w-full bg-slate-900 shadow-xl py-6 text-center border-b border-slate-700">
-        <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">YouTube Viral Machine</h1>
-        <p class="text-slate-400 mt-2">100% Autonomous Video Generation Engine</p>
-    </header>
-
-    <main class="w-full max-w-5xl p-6 mt-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <!-- Video Player -->
-        <div class="flex flex-col items-center space-y-4">
-            <div class="relative w-full max-w-[320px] rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-800 bg-black">
-                <video controls autoplay loop muted class="w-full h-auto">
-                    <source src="assets/videos/PERFECT_VIRAL_SHORT.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">LIVE GENERATION</div>
-            </div>
-            <p class="text-slate-400 text-sm font-semibold">🔥 Latest Render: FINAL_VIRAL_SHORT.mp4</p>
+<body class="text-slate-200 antialiased h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 glass h-full flex flex-col border-r border-slate-800/50 hidden md:flex">
+        <div class="p-6 border-b border-slate-800/50">
+            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-500 tracking-tight">VidRush 2.0</h1>
+            <p class="text-xs text-slate-500 font-medium tracking-wider uppercase mt-1">Autonomous Agent</p>
         </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="#" class="flex items-center space-x-3 bg-violet-600/10 text-violet-400 px-4 py-3 rounded-xl transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <span class="font-semibold">Command Center</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-xl transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                <span class="font-medium">Video Library</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-xl transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span class="font-medium">Analytics</span>
+            </a>
+        </nav>
+        <div class="p-4">
+            <div class="bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-xl p-4 text-white">
+                <p class="text-sm font-semibold mb-1">Engine Status</p>
+                <div class="flex items-center space-x-2">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span class="text-xs font-medium text-green-100">Live & Rendering</span>
+                </div>
+            </div>
+        </div>
+    </aside>
 
-        <!-- System Stats -->
-        <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700">
-            <h2 class="text-2xl font-bold text-white mb-6">Engine Status</h2>
-            <ul class="space-y-4 text-slate-300">
-                <li class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-3 animate-pulse"></span> <strong>Pipeline:</strong> Online & Running</li>
-                <li class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-3"></span> <strong>Source API:</strong> Pexels Pro Integration</li>
-                <li class="flex items-center"><span class="w-3 h-3 bg-purple-500 rounded-full mr-3"></span> <strong>Voiceover:</strong> Piper TTS (Human-Like AI)</li>
-                <li class="flex items-center"><span class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span> <strong>Niche:</strong> High-Ticket Finance / Wealth</li>
-                <li class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-3"></span> <strong>Auto-Upload:</strong> Pending Configuration</li>
-            </ul>
-            <div class="mt-8 p-4 bg-slate-900 rounded-lg border border-slate-700">
-                <p class="text-xs text-slate-500 font-mono">> SYSTEM LOG: MASTERPIECE GENERATED SUCESSFULLY.</p>
-                <p class="text-xs text-slate-500 font-mono mt-1">> DURATION: 12 SECONDS | 1080x1920 (9:16)</p>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto relative">
+        <!-- Background glows -->
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-violet-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-fuchsia-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <header class="p-8 pb-4 flex justify-between items-end z-10">
+            <div>
+                <h2 class="text-3xl font-bold text-white tracking-tight">Dashboard Overview</h2>
+                <p class="text-slate-400 mt-1">Real-time pipeline metrics and latest renders.</p>
+            </div>
+            <button class="bg-white text-black font-semibold px-5 py-2.5 rounded-lg shadow hover:bg-slate-200 transition active:scale-95">Deploy Render</button>
+        </header>
+
+        <div class="p-8 pt-4 grid grid-cols-1 lg:grid-cols-3 gap-8 z-10">
+            <!-- Latest Video Output -->
+            <div class="lg:col-span-1 flex flex-col items-center justify-center">
+                <div class="phone-mockup relative w-[280px] h-[500px] rounded-[3rem] border-[8px] border-slate-800 bg-black overflow-hidden flex items-center justify-center">
+                    <video class="w-full h-full object-cover" controls autoplay loop muted>
+                        <source src="assets/videos/PERFECT_VIRAL_SHORT.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute top-5 flex w-full justify-center">
+                        <div class="w-32 h-6 bg-black rounded-b-3xl"></div>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <span class="inline-block px-3 py-1 bg-green-500/10 text-green-400 text-xs font-bold rounded-full border border-green-500/20 mb-2">SUCCESSFUL BUILD</span>
+                    <h3 class="text-lg font-bold text-white">PERFECT_VIRAL_SHORT.mp4</h3>
+                    <p class="text-slate-500 text-sm">Duration: 00:12s | Quality: 4K Upscaled</p>
+                </div>
+            </div>
+
+            <!-- Stats & Logs -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- KPI Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="glass p-5 rounded-2xl">
+                        <p class="text-slate-400 text-sm font-medium">Total Renders (24h)</p>
+                        <p class="text-3xl font-bold text-white mt-1">14</p>
+                        <p class="text-xs text-green-400 mt-2 flex items-center">↑ 12% vs yesterday</p>
+                    </div>
+                    <div class="glass p-5 rounded-2xl">
+                        <p class="text-slate-400 text-sm font-medium">Average Render Time</p>
+                        <p class="text-3xl font-bold text-white mt-1">42s</p>
+                        <p class="text-xs text-green-400 mt-2 flex items-center">Superfast Instance</p>
+                    </div>
+                    <div class="glass p-5 rounded-2xl hidden md:block">
+                        <p class="text-slate-400 text-sm font-medium">Storage Used</p>
+                        <p class="text-3xl font-bold text-white mt-1">1.2 GB</p>
+                        <div class="w-full bg-slate-700 h-1.5 rounded-full mt-3 overflow-hidden"><div class="bg-violet-500 h-full w-[15%]"></div></div>
+                    </div>
+                </div>
+
+                <!-- Live Pipeline Log -->
+                <div class="glass rounded-2xl p-6 flex flex-col h-[300px]">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-white">System Terminal</h3>
+                        <span class="text-xs font-mono text-slate-500">root@vidrush-engine:~#</span>
+                    </div>
+                    <div class="flex-1 bg-[#050505] rounded-xl border border-slate-800 p-4 font-mono text-sm text-green-400 overflow-y-auto space-y-2">
+                        <p><span class="text-slate-500">[14:32:01]</span> [PEXELS_API] Fetching high-quality B-roll...</p>
+                        <p><span class="text-slate-500">[14:32:04]</span> [PIPER_TTS] Generating human-like audio layer...</p>
+                        <p><span class="text-slate-500">[14:32:08]</span> [FFMPEG] Stitching layers with CRF 22...</p>
+                        <p><span class="text-slate-500">[14:32:11]</span> [ASS_SUBS] Burning cinematic Hormozi subtitles...</p>
+                        <p class="text-blue-400"><span class="text-slate-500">[14:32:12]</span> [BUILD] Render completed successfully. File: PERFECT_VIRAL_SHORT.mp4</p>
+                        <p class="text-yellow-400"><span class="text-slate-500">[14:32:15]</span> [UPLOAD_QUEUE] Waiting for YouTube Quota reset...</p>
+                        <p class="animate-pulse">_</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

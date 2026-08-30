@@ -3,38 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Viral Machine | Hyper-Dashboard</title>
+    <title>AI Viral Machine | Quantum Level</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Space+Grotesk:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: #050505;
+            background: #000;
             color: #fff;
             overflow-x: hidden;
             margin: 0;
-            cursor: crosshair;
+            cursor: none; /* Custom cursor */
         }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
         
-        /* Hexagon Matrix Background */
-        .hex-bg {
+        /* ThreeJS Canvas */
+        #webgl-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
-            background: url('data:image/svg+xml;utf8,<svg width="40" height="69.28203230275509" viewBox="0 0 40 69.28203230275509" xmlns="http://www.w3.org/2000/svg"><path d="M 40 17.3205081 L 40 51.9615242 L 20 63.5085 L 0 51.9615242 L 0 17.3205081 L 20 5.7735 L 40 17.3205081 Z" fill="none" stroke="rgba(0, 255, 170, 0.03)" stroke-width="1"/></svg>');
-            background-size: 40px 69.28px;
-            animation: pulse-bg 10s infinite alternate;
+            opacity: 0.6;
         }
-        @keyframes pulse-bg { 0% { opacity: 0.5; } 100% { opacity: 1; transform: scale(1.05); } }
 
-        /* Multi-layered Mouse Spotlight */
-        .spotlight {
-            position: fixed; width: 800px; height: 800px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,255,170,0.1) 0%, rgba(0,100,255,0.05) 40%, rgba(0,0,0,0) 70%);
-            pointer-events: none; z-index: -1;
+        /* Custom Trailing Cursor */
+        .cursor-dot {
+            position: fixed; width: 8px; height: 8px; background: #00ffaa;
+            border-radius: 50%; pointer-events: none; z-index: 9999;
             transform: translate(-50%, -50%);
-            transition: 0.1s ease-out;
-            mix-blend-mode: screen;
+            box-shadow: 0 0 10px #00ffaa, 0 0 20px #00ffaa;
+        }
+        .cursor-ring {
+            position: fixed; width: 40px; height: 40px;
+            border: 1px solid rgba(0, 255, 170, 0.5);
+            border-radius: 50%; pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+        }
+
+        /* Glitch Effect */
+        .glitch-text {
+            position: relative;
+            color: white;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent;
+        }
+        .glitch-text::before {
+            left: 2px; text-shadow: -2px 0 red;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px; text-shadow: -2px 0 blue;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 86px, 0); }
+            20% { clip: rect(65px, 9999px, 2px, 0); }
+            40% { clip: rect(32px, 9999px, 98px, 0); }
+            60% { clip: rect(90px, 9999px, 45px, 0); }
+            80% { clip: rect(12px, 9999px, 20px, 0); }
+            100% { clip: rect(78px, 9999px, 56px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(10px, 9999px, 45px, 0); }
+            40% { clip: rect(89px, 9999px, 12px, 0); }
+            60% { clip: rect(23px, 9999px, 78px, 0); }
+            80% { clip: rect(54px, 9999px, 34px, 0); }
+            100% { clip: rect(98px, 9999px, 2px, 0); }
         }
 
         /* 3D Tilt Device Wrapper */
@@ -43,184 +82,239 @@
             padding: 12px;
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.01));
             border-radius: 46px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,255,170,0.2);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,255,170,0.4);
             backdrop-filter: blur(20px);
             transform-style: preserve-3d;
             transform: perspective(1000px);
-            transition: transform 0.1s;
         }
         .phone {
-            width: 320px; height: 640px;
-            background: #000;
-            border-radius: 36px;
-            overflow: hidden;
-            position: relative;
-            transform: translateZ(30px);
-            border: 1px solid rgba(255,255,255,0.05);
+            width: 320px; height: 640px; background: #000; border-radius: 36px;
+            overflow: hidden; position: relative; transform: translateZ(40px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .phone video {
-            width: 100%; height: 100%; object-fit: cover;
-            filter: contrast(1.15) saturate(1.2);
-        }
+        .phone video { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Live Terminal */
+        /* Terminal */
         .terminal {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(0, 255, 170, 0.2);
-            border-radius: 12px;
-            padding: 16px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: #00ffaa;
-            height: 180px;
-            overflow-y: hidden;
-            box-shadow: inset 0 0 20px rgba(0,255,170,0.05);
-            position: relative;
+            background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(0, 255, 170, 0.3);
+            border-radius: 12px; padding: 16px; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem; color: #00ffaa; height: 180px; overflow-y: hidden;
+            box-shadow: inset 0 0 30px rgba(0,255,170,0.1); position: relative;
         }
-        .terminal::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 100%;
-            background: linear-gradient(rgba(0,255,170,0.1) 50%, rgba(0,0,0,0.25) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 10;
-        }
-        .term-line {
-            margin: 4px 0;
-            opacity: 0;
-            animation: fadeIn 0.1s forwards;
-        }
+        .term-line { margin: 4px 0; opacity: 0; animation: fadeIn 0.1s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
 
         .glass-panel {
-            background: rgba(15, 15, 15, 0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-            border-radius: 20px;
+            background: rgba(10, 10, 10, 0.5); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9); border-radius: 20px;
         }
 
         .gradient-text {
             background: linear-gradient(135deg, #fff, #00ffaa, #00b3ff);
-            background-size: 200% auto;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: gradient-shift 5s linear infinite;
         }
         @keyframes gradient-shift { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
     </style>
 </head>
 <body class="flex flex-col h-screen overflow-hidden">
-    <div class="hex-bg"></div>
-    <div class="spotlight" id="spotlight"></div>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+
+    <!-- WebGL Canvas for ThreeJS -->
+    <canvas id="webgl-canvas"></canvas>
 
     <!-- Header -->
-    <nav class="flex justify-between items-center px-8 py-5 glass-panel mx-8 mt-6 z-50">
+    <nav class="flex justify-between items-center px-8 py-5 glass-panel mx-8 mt-6 z-50 transition-transform duration-300 hover:scale-[1.02]">
         <div class="flex items-center gap-3">
-            <div class="w-3 h-3 bg-[#00ffaa] shadow-[0_0_15px_#00ffaa]"></div>
-            <h1 class="text-xl font-bold tracking-widest uppercase">Viral<span class="text-[#00ffaa]">Machine</span>_v6</h1>
+            <div class="w-3 h-3 bg-[#00ffaa] shadow-[0_0_20px_#00ffaa] animate-pulse"></div>
+            <h1 class="text-xl font-bold tracking-widest uppercase">Viral<span class="text-[#00ffaa]">Machine</span>_v7</h1>
         </div>
         <div class="flex gap-8 font-mono text-xs font-bold tracking-widest">
-            <span class="text-gray-500">SYS: <span class="text-green-400">NOMINAL</span></span>
-            <span class="text-gray-500">YIELD: <span class="text-blue-400">MAXIMIZED</span></span>
+            <span class="text-gray-500">SYS: <span class="text-green-400">QUANTUM_READY</span></span>
         </div>
     </nav>
 
     <main class="flex-grow flex items-center justify-between px-20 relative z-10 w-full max-w-7xl mx-auto">
-        
-        <!-- Left Column: Data & Terminal -->
         <div class="w-[500px] space-y-8">
             <div>
-                <h2 class="text-5xl font-extrabold leading-[1.1] tracking-tighter mb-4">
-                    The Ultimate <br> <span class="gradient-text">Autonomous Architecture.</span>
+                <h2 class="text-6xl font-extrabold leading-[1.1] tracking-tighter mb-4 glitch-text" data-text="Autonomous Architecture.">
+                    Autonomous Architecture.
                 </h2>
                 <p class="text-gray-400 text-sm leading-relaxed">
-                    System autonomously executes highly advanced OpenCV generative scripts, orchestrates AI narration, and deploys high-retention content worldwide.
+                    WebGL + AI Orchestration. Hover over elements to trigger haptic geometry shifts. 
                 </p>
             </div>
             
-            <div class="terminal" id="terminal">
-                <!-- Logs will auto-generate here -->
-            </div>
+            <div class="terminal" id="terminal"></div>
 
             <div class="grid grid-cols-2 gap-4">
-                <a href="https://bhaveshkumawat632.github.io/money-making-blog/" class="glass-panel p-4 flex flex-col justify-center items-center group cursor-pointer hover:border-[#00ffaa]/50 transition-colors">
-                    <span class="text-xs text-gray-500 font-mono mb-1 group-hover:text-[#00ffaa]">MODULE 01</span>
-                    <span class="font-bold">Access Blog Engine ↗</span>
+                <a href="https://bhaveshkumawat632.github.io/money-making-blog/" class="glass-panel p-4 flex flex-col justify-center items-center group cursor-pointer hover:bg-[#00ffaa]/10 transition-all">
+                    <span class="text-xs text-gray-500 font-mono mb-1 group-hover:text-white">MODULE 01</span>
+                    <span class="font-bold text-[#00ffaa]">Blog Engine ↗</span>
                 </a>
                 <div class="glass-panel p-4 flex flex-col justify-center items-center">
                     <span class="text-xs text-gray-500 font-mono mb-1">REVENUE SIMULATION</span>
-                    <span class="font-bold text-2xl text-blue-400">$<span id="rev-counter">1,240</span>.00</span>
+                    <span class="font-bold text-2xl text-blue-400">$<span id="rev-counter">8,240</span>.00</span>
                 </div>
             </div>
         </div>
 
-        <!-- Right Column: 3D Tilt Phone -->
         <div class="device-wrapper" id="tilt-box">
             <div class="phone">
                 <video src="assets/videos/PERFECT_VIRAL_SHORT.mp4" autoplay loop muted playsinline></video>
                 <div class="absolute bottom-6 left-4 z-20">
                     <div class="font-bold text-sm text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">@ViralMachine</div>
-                    <div class="text-xs text-white font-mono mt-1 w-56 leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">The universe is just code. Wake up to the matrix... 🌌</div>
                 </div>
             </div>
         </div>
-
     </main>
 
     <script>
-        // Smooth Spotlight
-        const spotlight = document.getElementById('spotlight');
-        let mouseX = 0, mouseY = 0, spotX = 0, spotY = 0;
+        // Custom Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = mouseX;
+        let ringY = mouseY;
+
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
         });
-        function animateSpotlight() {
-            spotX += (mouseX - spotX) * 0.1;
-            spotY += (mouseY - spotY) * 0.1;
-            spotlight.style.left = spotX + 'px';
-            spotlight.style.top = spotY + 'px';
-            requestAnimationFrame(animateSpotlight);
-        }
-        animateSpotlight();
 
-        // 3D Tilt Effect on Phone
+        // Add hover effects for cursor
+        document.querySelectorAll('a, .device-wrapper').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorRing.style.width = '60px';
+                cursorRing.style.height = '60px';
+                cursorRing.style.backgroundColor = 'rgba(0, 255, 170, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorRing.style.width = '40px';
+                cursorRing.style.height = '40px';
+                cursorRing.style.backgroundColor = 'transparent';
+            });
+        });
+
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = ringX + 'px';
+            cursorRing.style.top = ringY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // 3D Tilt Logic
         const tiltBox = document.getElementById('tilt-box');
         document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.clientX) / 40;
-            const y = (window.innerHeight / 2 - e.clientY) / 40;
+            const x = (window.innerWidth / 2 - e.clientX) / 30;
+            const y = (window.innerHeight / 2 - e.clientY) / 30;
             tiltBox.style.transform = `perspective(1000px) rotateY(${-x}deg) rotateX(${y}deg)`;
+        });
+
+        // Three.js Interactive 3D Background
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Create a massive wireframe Icosahedron
+        const geometry = new THREE.IcosahedronGeometry(10, 2);
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0x00ffaa, 
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        // Add Floating Particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 40;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x00b3ff,
+            transparent: true,
+            opacity: 0.8
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        camera.position.z = 15;
+
+        // Mouse Interaction for 3D
+        let targetX = 0;
+        let targetY = 0;
+        document.addEventListener('mousemove', (event) => {
+            targetX = (event.clientX / window.innerWidth) * 2 - 1;
+            targetY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Rotate main sphere
+            sphere.rotation.y += 0.002;
+            sphere.rotation.x += 0.001;
+
+            // Rotate particles based on mouse
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.001;
+            
+            // Interactive camera movement
+            camera.position.x += (targetX * 5 - camera.position.x) * 0.05;
+            camera.position.y += (targetY * 5 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        animate3D();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
         // Fake Terminal Logger
         const terminal = document.getElementById('terminal');
         const logs = [
-            "[SYSTEM] Initializing Masterpiece generation loop...",
-            "[AGENT] Selected topic: Quantum Matrix Concepts",
+            "[SYSTEM] Initializing Quantum generation loop...",
+            "[AGENT] Selected topic: WebGL Acceleration",
             "[TTS] Calling Edge-TTS ChristopherNeural... OK.",
-            "[CV2] Rendering 1920x1080 mathematically perfect frames...",
+            "[THREEJS] Rendering 3D interactive matrix...",
             "[CV2] Applied 3D rotational matrices. Speed=400ms.",
-            "[FFMPEG] Burning hyper-impact subtitle typography...",
-            "[FFMPEG] Merging 40Hz deep space drone audio track...",
             "[SERVER] Deploying to edge CDN nodes...",
-            "[NETWORK] Status: 200 OK. Video live.",
-            "[SYSTEM] Sleeping for 14400s..."
+            "[NETWORK] Status: 200 OK. Video live."
         ];
         let logIndex = 0;
         setInterval(() => {
-            if(logIndex >= logs.length) logIndex = 0; // loop logs
+            if(logIndex >= logs.length) logIndex = 0;
             const div = document.createElement('div');
             div.className = 'term-line';
             div.innerText = `> ${logs[logIndex]}`;
             terminal.appendChild(div);
             terminal.scrollTop = terminal.scrollHeight;
             logIndex++;
-        }, 1500);
-
-        // Revenue Simulation
-        let rev = 1240.00;
-        setInterval(() => {
-            rev += (Math.random() * 2);
-            document.getElementById('rev-counter').innerText = rev.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        }, 3000);
+        }, 1200);
     </script>
 </body>
 </html>
